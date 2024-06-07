@@ -1,8 +1,8 @@
-import {PrismaClient} from "@prisma/client"
-import {userResultExtend} from "../models/user"
+import {PrismaClient, User} from "@prisma/client"
+import {dateResultExtend} from "./extend"
 
-export const db = new PrismaClient().$extends({
+export const prisma = new PrismaClient().$extends({
     result: {
-        user: userResultExtend,
+        user: dateResultExtend<User>(),
     }
 })

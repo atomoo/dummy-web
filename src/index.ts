@@ -3,23 +3,25 @@ import 'dotenv/config'
 import {readEnvFile} from "./utils/config"
 import {BaseResponse} from "./plugins/base-response"
 import {controllers} from "./controllers"
+import {logger} from "./plugins/logger"
 
 readEnvFile().then(config => {
   new Elysia()
     .decorate('configuration', config)
-    .trace(async ({request, response}) => {
-      const {time} = await request
-      const {end} = await response
-      console.log('handle took',(await end) - time, 'ms')
+    .use(logger)
+    .trace(async ({handle, context}) => {
+      const {path, body, request, query, logger} = context
+      const {time, end} = await handle
+      logger.info(`[${request.method}]: [${path}] with {query: ${JSON.stringify(query)}}, {body: ${JSON.stringify(body)}}`,(await end) - time, 'ms')
     })
-    .onError(({error}) => {
-      console.error(error)
+    .onError(({error, logger}) => {
+      logger.error(error)
       return {code: -1, message: 'system error', content: null}
     })
     .use(BaseResponse)
     .use(controllers)
-    .onStart(({server}) => {
-      console.log(`Running at ${server?.hostname}:${server?.port}`)
+    .onStart(({server, decorator}) => {
+      decorator.logger.info(`Running at ${server?.hostname}:${server?.port}`)
     })
     .listen(3000)
 })

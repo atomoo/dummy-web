@@ -1,11 +1,11 @@
 import {Prisma} from '@prisma/client'
-import {db} from "../prisma"
+import {prisma} from "../prisma"
 
 export class UserService {
-    user
+    private readonly user
 
     constructor() {
-        this.user = db.user
+        this.user = prisma.user
     }
 
     findAll() {
