@@ -1,6 +1,6 @@
-import Elysia from "elysia";
+import Elysia from "elysia"
 
-export const BaseResponse = (app: Elysia) => app.mapResponse(({response, set}) => {
+export const BaseResponse = (app: Elysia) => app.mapResponse(({response}) => {
     return new Response(
         JSON.stringify({code: 0, content: response}), 
         {

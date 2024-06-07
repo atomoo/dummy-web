@@ -18,9 +18,8 @@ export const readEnvFile = async <ConfigType extends Record<string, any>>(): Pro
         '.env.local',
     ]
     let configContent = ''
-    console.log('read file')
-    for (let i = 0; i < files.length; i++) {
-        const file = Bun.file(`${process.cwd()}/${files[i]}`)
+    for (const filepath of files) {
+        const file = Bun.file(`${process.cwd()}/${filepath}`)
         const exist = await file.exists()
         if (exist) {
             const content = await file.text()

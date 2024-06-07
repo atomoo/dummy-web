@@ -1,5 +1,7 @@
 {
     "cSpell.words": [
         "elysia"
-    ]
+    ],
+    "eslint.useFlatConfig": false,
+    "prettier.enable": false
 }

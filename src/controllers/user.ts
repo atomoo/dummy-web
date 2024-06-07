@@ -1,6 +1,6 @@
-import Elysia from "elysia";
-import { UserService } from "../services/user";
-import { UserModel } from "../models/user";
+import Elysia from "elysia"
+import {UserService} from "../services/user"
+import {UserModel} from "../models/user"
 
 export const UserController = new Elysia()
     .decorate('userService', new UserService())

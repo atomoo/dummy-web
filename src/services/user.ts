@@ -1,5 +1,5 @@
-import { Prisma } from '@prisma/client'
-import { db } from "../prisma";
+import {Prisma} from '@prisma/client'
+import {db} from "../prisma"
 
 export class UserService {
     user
@@ -13,6 +13,6 @@ export class UserService {
     }
 
     create(user: Prisma.UserCreateInput) {
-        return this.user.create({ data: user, select: { id: true } })
+        return this.user.create({data: user, select: {id: true}})
     }
 }
