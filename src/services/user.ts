@@ -15,4 +15,12 @@ export class UserService {
     create(user: Prisma.UserCreateInput) {
         return this.user.create({data: user, select: {id: true}})
     }
+
+    findById(id: string) {
+        return this.user.findUnique({where: {id}})
+    }
+
+    deleteById(id: string) {
+        return this.user.delete({where: {id}})
+    }
 }

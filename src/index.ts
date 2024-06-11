@@ -10,18 +10,21 @@ readEnvFile().then(config => {
     .decorate('configuration', config)
     .use(logger)
     .trace(async ({handle, context}) => {
-      const {path, body, request, query, logger} = context
+      const {request, logger} = context
       const {time, end} = await handle
-      logger.info(`[${request.method}]: [${path}] with {query: ${JSON.stringify(query)}}, {body: ${JSON.stringify(body)}}`,(await end) - time, 'ms')
+      const endTime = await end
+      const dur = (endTime - time).toFixed(2)
+      logger.info(`[${request.method}]: [${request.url}]`, dur, 'ms')
+      // set.headers['Server-Timing'] = `handle;dur=${dur}`
     })
-    .onError(({error, logger}) => {
-      logger.error(error)
-      return {code: -1, message: 'system error', content: null}
+    .onError(({error, logger, body, path, query, request}) => {
+      logger.error(`[${request.method}]: [${path}] with {query: ${JSON.stringify(query)}}, {body: ${JSON.stringify(body)}}`, ' ', error.name, error.message, error.stack, error.cause)
+      return {code: -1, message: error.message || 'system error', content: null}
     })
     .use(BaseResponse)
     .use(controllers)
     .onStart(({server, decorator}) => {
       decorator.logger.info(`Running at ${server?.hostname}:${server?.port}`)
     })
-    .listen(3000)
+    .listen(config.port ?? 3000)
 })
